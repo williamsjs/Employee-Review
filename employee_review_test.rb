@@ -49,9 +49,8 @@ class ReviewTest < Minitest::Test
     eng = Department.new("engineering")
     eng.add_employee(fred)
     eng.add_employee(mary)
-    eng.total_dep_salaries
-    assert_equal fred.salary+mary.salary, eng.total_salaries
-    assert_equal 125000, eng.total_salaries
+    assert_equal fred.salary+mary.salary, eng.total_dep_salaries
+    assert_equal 125000, eng.total_dep_salaries
 
   end
 
@@ -76,7 +75,7 @@ class ReviewTest < Minitest::Test
     assert_equal 77000, mary.salary
   end
 
-  def test_give_department_raise
+  def test_give_department_raise_based_on_satisfactory
     fred = Employee.new(name: "Freddy", email: "freddy@gmail.com", phone_number: 919-434-5612, salary: 55000)
     mary = Employee.new(name: "Mary", email: "mary@gmail.com", phone_number: 919-234-3662, salary: 70000)
     jordan = Employee.new(name: "Jordan", email: "jordan@gmail.com", phone_number: 919-434-5602, salary: 60000)
@@ -87,9 +86,28 @@ class ReviewTest < Minitest::Test
     fred.is_satisfactory(false)
     eng.add_employee(mary)
     mary.is_satisfactory(true)
-    eng.give_raises(50000)
+    eng.give_raises(50000) do |emp|
+      emp.satisfactory == true
+    end
     assert_equal 95000, mary.salary
     assert_equal 85000, jordan.salary
+  end
+
+  def test_give_department_raise_based_on_criteria
+    fred = Employee.new(name: "Freddy", email: "freddy@gmail.com", phone_number: 919-434-5612, salary: 55000)
+    mary = Employee.new(name: "Mary", email: "mary@gmail.com", phone_number: 919-234-3662, salary: 70000)
+    jordan = Employee.new(name: "Jordan", email: "jordan@gmail.com", phone_number: 919-434-5602, salary: 60000)
+    eng = Department.new("engineering")
+    eng.add_employee(jordan)
+    jordan.is_satisfactory(true)
+    eng.add_employee(fred)
+    fred.is_satisfactory(false)
+    eng.add_employee(mary)
+    mary.is_satisfactory(true)
+    eng.give_raises (50000) do |emp|
+      emp.name == "Freddy"
+    end
+    assert_equal 80000, fred.salary
   end
 
 
@@ -111,6 +129,11 @@ class ReviewTest < Minitest::Test
 
 
 
+
+  def test_you_are_awesome
+    puts "you're awesome dude"
+    assert true
+  end
 
 
 
