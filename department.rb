@@ -17,12 +17,11 @@ class Department
       @total_salaries += object.salary.to_f
     end
   end
-
-  def give_raises(employees:, percent:, all:false)
-    if all == false
-      @employees.each do |name, emp|
-        emp.salary += emp.salary*percent/100
-      end
+#Ask Mason about way to get at length
+  def give_raises (amount)
+    @employees  .select {|name, emp| emp.satisfactory == true}
+                .each do |name, emp|
+                  emp.salary += amount/2
     end
   end
 

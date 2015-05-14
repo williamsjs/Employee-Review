@@ -71,13 +71,25 @@ class ReviewTest < Minitest::Test
   end
 
   def test_give_single_raise
+    mary = Employee.new(name: "Mary", email: "mary@gmail.com", phone_number: 919-234-3662, salary: 70000)
+    mary.give_raise(7000)
+    assert_equal 77000, mary.salary
+  end
+
+  def test_give_department_raise
     fred = Employee.new(name: "Freddy", email: "freddy@gmail.com", phone_number: 919-434-5612, salary: 55000)
     mary = Employee.new(name: "Mary", email: "mary@gmail.com", phone_number: 919-234-3662, salary: 70000)
+    jordan = Employee.new(name: "Jordan", email: "jordan@gmail.com", phone_number: 919-434-5602, salary: 60000)
     eng = Department.new("engineering")
+    eng.add_employee(jordan)
+    jordan.is_satisfactory(true)
     eng.add_employee(fred)
+    fred.is_satisfactory(false)
     eng.add_employee(mary)
-    eng.give_raises(employees:[mary],percent:10)
-    assert_equal 77000, mary.salary
+    mary.is_satisfactory(true)
+    eng.give_raises(50000)
+    assert_equal 95000, mary.salary
+    assert_equal 85000, jordan.salary
   end
 
 
