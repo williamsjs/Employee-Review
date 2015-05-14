@@ -20,9 +20,9 @@ class Department
   end
 #Ask Mason about way to get at length
   def give_raises (amount)
-    @employees  .select {|name, emp| yield(emp)}
-                .each do |name, emp|
-                  emp.salary += amount/2
+    eligible_employees = @employees.select {|name, emp| yield(emp)}
+    eligible_employees.each do |name, emp|
+      emp.salary += amount/eligible_employees.length
     end
   end
 

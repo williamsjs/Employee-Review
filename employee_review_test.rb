@@ -107,7 +107,7 @@ class ReviewTest < Minitest::Test
     eng.give_raises (50000) do |emp|
       emp.name == "Freddy"
     end
-    assert_equal 80000, fred.salary
+    assert_equal 105000, fred.salary
   end
 
 
