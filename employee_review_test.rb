@@ -11,6 +11,14 @@ class ReviewTest < Minitest::Test
     assert Department
   end
 
+  def test_classes_have_names
+    assert_equal "engineering", Department.new("engineering").name
+    assert_equal "Ryan", Employee.new(name:"Ryan").name
+  end
+
+  def test_employee_inputs
+    assert Employee.new(name: "Freddy", email: "freddy@gmail.com", phone_number: 919-434-5612, salary: 55000)
+  end
 
 
 
