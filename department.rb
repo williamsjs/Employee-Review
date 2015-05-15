@@ -18,7 +18,7 @@ class Department
     end
     return total_salaries
   end
-#Ask Mason about way to get at length
+  
   def give_raises (amount)
     eligible_employees = @employees.select {|name, emp| yield(emp)}
     eligible_employees.each do |name, emp|

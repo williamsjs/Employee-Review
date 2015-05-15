@@ -35,7 +35,7 @@ class ReviewTest < Minitest::Test
   end
 
   def test_retrieve_info
-    fred = Employee.new(name: "Freddy", email: "freddy@gmail.com", phone_number: 919-434-5612, salary: 55000)
+    fred = Employee.new(email: "freddy@gmail.com", phone_number: 919-434-5612, salary: 55000, name: "Freddy")
     mary = Employee.new(name: "Mary", email: "mary@gmail.com", phone_number: 919-234-3662, salary: 70000)
     eng = Department.new("engineering")
     assert_equal "Freddy", fred.name
@@ -108,6 +108,29 @@ class ReviewTest < Minitest::Test
       emp.name == "Freddy"
     end
     assert_equal 105000, fred.salary
+  end
+
+  def test_review_can_parse_text
+    fred = Employee.new(name: "Freddy", email: "freddy@gmail.com", phone_number: 919-434-5612, salary: 55000)
+    fred.add_review("NEGATIVE REVIEW 1:
+
+    Zeke is a very positive person and encourages those around him, but he has not done well technically this year.  There are two areas in which Zeke has room for improvement.  First, when communicating verbally (and sometimes in writing), he has a tendency to use more words than are required.  This conversational style does put people at ease, which is valuable, but it often makes the meaning difficult to isolate, and can cause confusion.
+
+    Second, when discussing new requirements with project managers, less of the information is retained by Zeke long-term than is expected.  This has a few negative consequences: 1) time is spent developing features that are not useful and need to be re-run, 2) bugs are introduced in the code and not caught because the tests lack the same information, and 3) clients are told that certain features are complete when they are inadequate.  This communication limitation could be the fault of project management, but given that other developers appear to retain more information, this is worth discussing further.")
+    fred.parse_review
+    assert fred.parse_review
+  end
+
+  def test_review_can_return_sentances
+    fred = Employee.new(name: "Freddy", email: "freddy@gmail.com", phone_number: 919-434-5612, salary: 55000)
+    fred.add_review("NEGATIVE REVIEW 1:
+
+    Zeke is a very positive person and encourages those around him, but he has not done well technically this year.  There are two areas in which Zeke has room for improvement.  First, when communicating verbally (and sometimes in writing), he has a tendency to use more words than are required.  This conversational style does put people at ease, which is valuable, but it often makes the meaning difficult to isolate, and can cause confusion.
+
+    Second, when discussing new requirements with project managers, less of the information is retained by Zeke long-term than is expected.  This has a few negative consequences: 1) time is spent developing features that are not useful and need to be re-run, 2) bugs are introduced in the code and not caught because the tests lack the same information, and 3) clients are told that certain features are complete when they are inadequate.  This communication limitation could be the fault of project management, but given that other developers appear to retain more information, this is worth discussing further.")
+    fred.parse_review
+    assert_equal 9, fred.parsed[0].length
+    puts fred.parsed
   end
 
 
