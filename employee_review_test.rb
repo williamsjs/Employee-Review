@@ -130,7 +130,34 @@ class ReviewTest < Minitest::Test
     Second, when discussing new requirements with project managers, less of the information is retained by Zeke long-term than is expected.  This has a few negative consequences: 1) time is spent developing features that are not useful and need to be re-run, 2) bugs are introduced in the code and not caught because the tests lack the same information, and 3) clients are told that certain features are complete when they are inadequate.  This communication limitation could be the fault of project management, but given that other developers appear to retain more information, this is worth discussing further.")
     fred.parse_review
     assert_equal 9, fred.parsed[0].length
-    puts fred.parsed
+  end
+
+  def test_analyze_sentance_can_find_words
+    fred = Employee.new(name: "Freddy", email: "freddy@gmail.com", phone_number: 919-434-5612, salary: 55000)
+    fred.add_review("NEGATIVE REVIEW 1:
+
+    Zeke is a very positive person and encourages those around him, but he has not done well technically this year.  There are two areas in which Zeke has room for improvement.  First, when communicating verbally (and sometimes in writing), he has a tendency to use more words than are required.  This conversational style does put people at ease, which is valuable, but it often makes the meaning difficult to isolate, and can cause confusion.
+
+    Second, when discussing new requirements with project managers, less of the information is retained by Zeke long-term than is expected.  This has a few negative consequences: 1) time is spent developing features that are not useful and need to be re-run, 2) bugs are introduced in the code and not caught because the tests lack the same information, and 3) clients are told that certain features are complete when they are inadequate.  This communication limitation could be the fault of project management, but given that other developers appear to retain more information, this is worth discussing further.")
+    fred.parse_review
+    first_sentance_results = fred.analyze(fred.parsed[0][1])
+    second_sentance_results = fred.analyze(fred.parsed[0][2])
+    assert_equal 3, first_sentance_results[2]
+    assert_equal 1, second_sentance_results[2]
+  end
+
+  def test_analyze_can_find_plurals
+    fred = Employee.new(name: "Freddy", email: "freddy@gmail.com", phone_number: 919-434-5612, salary: 55000)
+    fred.add_review("NEGATIVE REVIEW 1:
+
+    Zeke is a very positive person and encourages those around him, but he has not encourage done well technically this year encourage.  There are two areas in which Zeke has room for improvement.  First, when communicating verbally (and sometimes in writing), he has a tendency to use more words than are required.  This conversational style does put people at ease, which is valuable, but it often makes the meaning difficult to isolate, and can cause confusion.
+
+    Second, when discussing new requirements with project managers, less of the information is retained by Zeke long-term than is expected.  This has a few negative consequences: 1) time is spent developing features that are not useful and need to be re-run, 2) bugs are introduced in the code and not caught because the tests lack the same information, and 3) clients are told that certain features are complete when they are inadequate.  This communication limitation could be the fault of project management, but given that other developers appear to retain more information, this is worth discussing further.")
+    fred.parse_review
+    first_sentance_results = fred.analyze(fred.parsed[0][1])
+    second_sentance_results = fred.analyze(fred.parsed[0][2])
+    assert_equal 5, first_sentance_results[2]
+    assert_equal 1, second_sentance_results[2]
   end
 
 
@@ -141,22 +168,6 @@ class ReviewTest < Minitest::Test
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-  def test_you_are_awesome
-    puts "you're awesome dude"
-    assert true
-  end
 
 
 
