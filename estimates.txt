@@ -1,9 +1,15 @@
 Part 1 estimate = 2.5 hours
 	Thursday:
-		start 1:15
+		start 1:15pm
 		end 2:40pm
 Part 2 estimate = 2 hours
 	Thursday:
 		start 2:40pm
-		end 6:00pm
+		end 4:00pm
 Part 3 estimate = 2 hours(functional) 4 hours (satisfactory)
+	Thursday:
+		start 4:00pm
+		end: 6:00pm
+	Friday:
+		start 11:00am
+		end 5:15pm
