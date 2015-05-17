@@ -6,8 +6,8 @@ class Employee
     @name = name
     @salary = salary
     @reviews = []
+    @parsed = Array.new
     @satisfactory = nil
-    @parsed = []
     @positive_words = ["encourage","positive","well","good","improve","useful","value","pleasure","quick","willing","help","success","happy","responsive","effectiv","consistent","satisfied","impress","productiv","great","asset","enjoy","perfect","retain"]
     @negative_words = ["difficult", "confus", "negative", "inadequate","limit","fault","disagree","concern","slow","need","lack"]
   end
@@ -27,26 +27,30 @@ class Employee
   def parse_review
     @reviews.each do |review|
       #byebug
-      @parsed << review.split(/\.|:/)
+      sentances = review.split(/\.|:/)
+      sentances.each {|s| @parsed << s}
     end
     return true
   end
 
   def analyze(sentance)
+    # byebug
     hold_positive = []
     hold_negative = []
-    @positive_words.each { |word|
-      hold_positive << sentance.scan(/#{word}/)
-    }
-    @negative_words.each { |word|
-      hold_negative << sentance.scan(/#{word}/)
-    }
-    return_array = [hold_positive.flatten,hold_negative.flatten,hold_positive.flatten.length - hold_negative.flatten.length]
-    return return_array
+    search_param = sentance
+    hold_positive << @positive_words.select { |word| search_param.scan(/#{word}/).length > 0 ? true : false }
+    hold_negative << @negative_words.select { |word| search_param.scan(/#{word}/).length > 0 ? true : false }
+    # byebug
+    return hold_positive.flatten.length-hold_negative.flatten.length
   end
 
   def calculate_score
-    
+    total_score = 0
+    block = lambda{ |sentance| total_score += yield (sentance) }
+    @parsed.each &block
+    return total_score
   end
+
+
 
 end
