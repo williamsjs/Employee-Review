@@ -1,7 +1,7 @@
 require 'byebug'
 class Employee
   attr_reader :name, :reviews, :parsed
-  attr_accessor :salary, :satisfactory
+  attr_accessor :salary, :satisfactory, :positive_words, :negative_words
   def initialize(name:, email:"", phone_number: 000-000-0000, salary: 0)
     @name = name
     @salary = salary
@@ -38,6 +38,7 @@ class Employee
     hold_positive = []
     hold_negative = []
     search_param = sentance
+    p @negative_words
     hold_positive << @positive_words.select { |word| search_param.scan(/#{word}/).length > 0 ? true : false }
     hold_negative << @negative_words.select { |word| search_param.scan(/#{word}/).length > 0 ? true : false }
     # byebug
@@ -46,11 +47,24 @@ class Employee
 
   def calculate_score
     total_score = 0
-    block = lambda{ |sentance| total_score += yield (sentance) }
-    @parsed.each &block
+    calculator = lambda{ |sentance| total_score += yield (sentance) }
+    @parsed.each &calculator
+    if total_score <= 0
+      @satisfactory = false
+    else
+      @satisfactory = true
+    end
     return total_score
   end
 
+  def add_trigger_word(word:,positive:)
+    # byebug
+    if positive
+      @positive_words << word
+    else
+      @negative_words << word
+    end
+  end
 
 
 end

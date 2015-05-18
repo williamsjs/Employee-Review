@@ -13,3 +13,7 @@ Part 3 estimate = 2 hours(functional) 4 hours (satisfactory)
 	Friday:
 		start 11:00am
 		end 5:15pm
+	Sunday:
+		start 2:50pm
+		end 4:50pm
+	
