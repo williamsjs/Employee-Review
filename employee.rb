@@ -9,7 +9,7 @@ class Employee
     @parsed = Array.new
     @satisfactory = nil
     @positive_words = ["encourage","positive","well","good","improve","useful","value","pleasure","quick","willing","help","success","happy","responsive","effectiv","consistent","satisfied","impress","productiv","great","asset","enjoy","perfect","retain"]
-    @negative_words = ["difficult", "confus", "negative", "inadequate","limit","fault","disagree","concern","slow","need","lack"]
+    @negative_words = ["difficult", "confus", "negative", "inadequate","limit","fault","disagree","concern","slow","need","lack","not usefull","not done well","off topic"]
   end
 
   def add_review(text)
@@ -26,7 +26,6 @@ class Employee
 
   def parse_review
     @reviews.each do |review|
-      #byebug
       sentances = review.split(/\.|:/)
       sentances.each {|s| @parsed << s}
     end
@@ -34,21 +33,19 @@ class Employee
   end
 
   def analyze(sentance)
-    # byebug
     hold_positive = []
     hold_negative = []
     search_param = sentance
-    p @negative_words
     hold_positive << @positive_words.select { |word| search_param.scan(/#{word}/).length > 0 ? true : false }
-    hold_negative << @negative_words.select { |word| search_param.scan(/#{word}/).length > 0 ? true : false }
-    # byebug
-    return hold_positive.flatten.length-hold_negative.flatten.length
+    hold_negative << @negative_words.select { |word| search_param.scan(/#{word}?s?ful?es?able?ly/).length > 0 ? true : false }
+    hold_positive.flatten.length-hold_negative.flatten.length
   end
 
   def calculate_score
     total_score = 0
     calculator = lambda{ |sentance| total_score += yield (sentance) }
     @parsed.each &calculator
+    # byebug
     if total_score <= 0
       @satisfactory = false
     else
@@ -58,7 +55,7 @@ class Employee
   end
 
   def add_trigger_word(word:,positive:)
-    # byebug
+    #
     if positive
       @positive_words << word
     else

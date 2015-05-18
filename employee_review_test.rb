@@ -132,34 +132,6 @@ class ReviewTest < Minitest::Test
     assert_equal 9, fred.parsed.length
   end
 
-  # def test_analyze_sentance_can_find_positive_words
-  #   fred = Employee.new(name: "Freddy", email: "freddy@gmail.com", phone_number: 919-434-5612, salary: 55000)
-  #   fred.add_review("NEGATIVE REVIEW 1:
-  #
-  #   Zeke is a very positive person and encourages those around him, but he has not done well technically this year.  There are two areas in which Zeke has room for improvement.  First, when communicating verbally (and sometimes in writing), he has a tendency to use more words than are required.  This conversational style does put people at ease, which is valuable, but it often makes the meaning difficult to isolate, and can cause confusion.
-  #
-  #   Second, when discussing new requirements with project managers, less of the information is retained by Zeke long-term than is expected.  This has a few negative consequences: 1) time is spent developing features that are not useful and need to be re-run, 2) bugs are introduced in the code and not caught because the tests lack the same information, and 3) clients are told that certain features are complete when they are inadequate.  This communication limitation could be the fault of project management, but given that other developers appear to retain more information, this is worth discussing further.")
-  #   fred.parse_review
-  #   first_sentance_results = fred.analyze(fred.parsed[0][1])
-  #   second_sentance_results = fred.analyze(fred.parsed[0][2])
-  #   assert_equal 3, first_sentance_results[0].length
-  #   assert_equal 1, second_sentance_results[0].length
-  # end
-  #
-  # def test_analyze_can_find_negative_words
-  #   fred = Employee.new(name: "Freddy", email: "freddy@gmail.com", phone_number: 919-434-5612, salary: 55000)
-  #   fred.add_review("NEGATIVE REVIEW 1:
-  #
-  #   Zeke is a very positive person and encourages those around him, but he has not encourage done well technically this year encourage.  There are two areas in which Zeke has room for improvement.  First, when communicating verbally (and sometimes in writing), he has a tendency to use more words than are required.  This conversational style does put people at ease, which is valuable, but it often makes the meaning difficult to isolate, and can cause confusion.
-  #
-  #   Second, when discussing new requirements with project managers, less of the information is retained by Zeke long-term than is expected.  This has a few negative consequences: 1) time is spent developing features that are not useful and need to be re-run, 2) bugs are introduced in the code and not caught because the tests lack the same information, and 3) clients are told that certain features are complete when they are inadequate.  This communication limitation could be the fault of project management, but given that other developers appear to retain more information, this is worth discussing further.")
-  #   fred.parse_review
-  #   fourth_sentance_results = fred.analyze(fred.parsed[0][4])
-  #   sixth_sentance_results = fred.analyze(fred.parsed[0][6])
-  #   assert_equal 2, fourth_sentance_results[1].length
-  #   assert_equal 1, sixth_sentance_results[1].length
-  # end
-
   def test_analyze_can_calculate_sentance_score
     fred = Employee.new(name: "Freddy", email: "freddy@gmail.com", phone_number: 919-434-5612, salary: 55000)
     fred.add_review("NEGATIVE REVIEW 1:
@@ -181,6 +153,24 @@ class ReviewTest < Minitest::Test
     Second, when discussing new requirements with project managers, less of the information is retained by Zeke long-term than is expected.  This has a few negative consequences: 1) time is spent developing features that are not useful and need to be re-run, 2) bugs are introduced in the code and not caught because the tests lack the same information, and 3) clients are told that certain features are complete when they are inadequate.  This communication limitation could be the fault of project management, but given that other developers appear to retain more information, this is worth discussing further.")
     fred.parse_review
     assert_equal -1, fred.calculate_score {|sentance| fred.analyze(sentance)}
+    mary = Employee.new(name: "Mary", email: "mary@gmail.com", phone_number: 919-234-3662, salary: 70000)
+    mary.add_review("Xavier is a huge asset to SciMed and is a pleasure to work with.  He quickly knocks out tasks assigned to him, implements code that rarely needs to be revisited, and is always willing to help others despite his heavy workload.  When Xavier leaves on vacation, everyone wishes he didn't have to go
+
+    Last year, the only concerns with Xavier performance were around ownership.  In the past twelve months, he has successfully taken full ownership of both Acme and Bricks, Inc.  Aside from some false starts with estimates on Acme, clients are happy with his work and responsiveness, which is everything that his managers could ask for.")
+    mary.parse_review
+    assert_equal 6, mary.calculate_score {|sentance| mary.analyze(sentance)}
+
+  end
+
+  def test_calculate_score_can_use_other_methods
+    fred = Employee.new(name: "Freddy", email: "freddy@gmail.com", phone_number: 919-434-5612, salary: 55000)
+    fred.add_review("NEGATIVE REVIEW 1:
+
+    Zeke is a very positive person and encourages those around him, but he has not encourage done well technically this year encourage.  There are two areas in which Zeke has room for improvement.  First, when communicating verbally (and sometimes in writing), he has a tendency to use more words than are required.  This conversational style does put people at ease, which is valuable, but it often makes the meaning difficult to isolate, and can cause confusion.
+
+    Second, when discussing new requirements with project managers, less of the information is retained by Zeke long-term than is expected.  This has a few negative consequences: 1) time is spent developing features that are not useful and need to be re-run, 2) bugs are introduced in the code and not caught because the tests lack the same information, and 3) clients are told that certain features are complete when they are inadequate.  This communication limitation could be the fault of project management, but given that other developers appear to retain more information, this is worth discussing further.")
+    fred.parse_review
+    assert_equal 9, fred.calculate_score {|sentance| 1}
   end
 
   def test_analyze_can_learn_new_words
@@ -195,7 +185,12 @@ class ReviewTest < Minitest::Test
 
     fred.add_trigger_word(word:"bugs",positive:false)
     assert_equal -3, fred.analyze(fred.parsed[7])
+
+    fred.add_trigger_word(word:"complete",positive:true)
+    assert_equal -2, fred.analyze(fred.parsed[7])
   end
+
+
 
 
 

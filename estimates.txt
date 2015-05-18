@@ -16,4 +16,9 @@ Part 3 estimate = 2 hours(functional) 4 hours (satisfactory)
 	Sunday:
 		start 2:50pm
 		end 4:50pm
+		start 10:00pm
+		end 12:00am
+
+
+I did fairly well estimating the first two parts, but the third I thought I had a good idea of the time commitment, but the estimate ended up being incredibly short.  This is a classic example of not knowing what you don’t know.  
 	
